@@ -2,6 +2,7 @@
 
 
 use Miladr\Jalali\jDate;
+use Database\Database;
 
 session_start();
 
@@ -9,14 +10,14 @@ define('BASE_PATH', __DIR__);
 define('CURRENT_DOMAIN', currentDomain());
 define('DISPLAY_ERROR', true);
 
-define('DB_HOST', 'localhost:8000');
-define('DB_USERNAME', 'ROOT');
-define('DB_PASSWORD', '');
+define('DB_HOST', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '1234');
 define('DB_NAME', 'stackoverflow');
 
 
-require_once 'activities\Admin\Category.php';
-
+require_once __DIR__ . '/activities/Admin/Category.php';
+require_once __DIR__ . '/database/Database.php';
 //mail
 
 
@@ -68,6 +69,7 @@ function uri($reservedUrl, $class, $method, $requestMethod = 'GET')
 
 spl_autoload_register(function ($className) {
     $path = BASE_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR;
+    $className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
     include $path . $className . '.php';
 });
 
