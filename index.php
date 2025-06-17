@@ -1,6 +1,7 @@
 <?php
 
 
+use Database\CreateDB;
 use Miladr\Jalali\jDate;
 use Database\Database;
 
@@ -18,9 +19,12 @@ define('DB_NAME', 'stackoverflow');
 
 require_once __DIR__ . '/activities/Admin/Category.php';
 require_once __DIR__ . '/database/Database.php';
+require_once __DIR__ . '/database/CreateDB.php';
 //mail
 
 
+$db = new CreateDB();
+$db->run();
 
 function uri($reservedUrl, $class, $method, $requestMethod = 'GET')
 {
@@ -46,8 +50,7 @@ function uri($reservedUrl, $class, $method, $requestMethod = 'GET')
     for ($key = 0; $key < sizeof($currentUrlArray); $key++) {
         if ($reservedUrlArray[$key][0] == "{" && $reservedUrlArray[$key][strlen($reservedUrlArray[$key]) - 1] == "}") {
             array_push($parameters, $currentUrlArray[$key]);
-        }
-        elseif ($currentUrlArray[$key] !== $reservedUrlArray[$key]) {
+        } elseif ($currentUrlArray[$key] !== $reservedUrlArray[$key]) {
             return false;
         }
     }
@@ -73,16 +76,18 @@ spl_autoload_register(function ($className) {
     include $path . $className . '.php';
 });
 
-function asset($src){
+function asset($src)
+{
     $domain = trim(CURRENT_DOMAIN, '/ ');
     $src = $domain . '/' . trim($src, '/ ');
     return $src;
 }
 
 
-function url($url){
+function url($url)
+{
     $domain = trim(CURRENT_DOMAIN, '/ ');
-    $url = $domain . '/' . trim(url, '/ ');
+    $url = $domain . '/' . trim($url, '/ ');
     return $url;
 }
 
@@ -108,12 +113,11 @@ function methodField()
 
 function displayError($status)
 {
-    if ($status){
+    if ($status) {
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
-    }
-    else{
+    } else {
         ini_set('display_errors', 0);
         ini_set('display_startup_errors', 0);
         error_reporting(0);
@@ -137,7 +141,7 @@ if (isset($_SESSION['flashmessage'])) {
 }
 function flash($name, $value = null)
 {
-    if($value == null){
+    if ($value == null) {
         global $flashmessage;
         $message = isset($flashmessage[$name]) ? $flashmessage[$name] : "";
         return $message;
@@ -166,3 +170,4 @@ uri('admin/category/edit/{id}', 'Activities\Admin\category', 'edit');
 
 echo '404';
 exit();
+
